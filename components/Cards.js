@@ -25,6 +25,9 @@ import axios from 'axios';
 
 let articlesArray = ['javascript','bootstrap','technology','jquery','node'];
 
+
+const cardContainer = document.querySelector('.cards-container');
+
 const URL = `https://lambda-times-api.herokuapp.com/articles`
 axios
     .get(URL)
@@ -32,7 +35,7 @@ axios
     const received = res.data
     received.articles.bootstrap.forEach(element => {
         const newCard = cardMaker(element);
-        document.body.append(newCard);
+        cardContainer.append(newCard);
     });
     })
 
