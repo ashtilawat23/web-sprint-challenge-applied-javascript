@@ -23,49 +23,61 @@
 
 import axios from 'axios';
 
-let articlesArray = ['javascript','bootstrap','technology','jquery','node'];
+const cards = document.querySelector(".cards-container")
 
+axios.get("https://lambda-times-api.herokuapp.com/articles")
+    .then(res => {
+        res.data.articles.javascript.forEach(item => {
+            cards.appendChild(cardMaker(item))
+        })
 
-const cardContainer = document.querySelector('.cards-container');
+        res.data.articles.bootstrap.forEach(item => {
+            cards.appendChild(cardMaker(item))
+        })
 
-const URL = `https://lambda-times-api.herokuapp.com/articles`
-axios
-    .get(URL)
-    .then((res) => {
-    const received = res.data
-    received.articles.bootstrap.forEach(element => {
-        const newCard = cardMaker(element);
-        cardContainer.append(newCard);
-    });
+        res.data.articles.technology.forEach(item => {
+            cardsCon.appendChild(cardMaker(item))
+        })
+
+        res.data.articles.jquery.forEach(item => {
+            cards.appendChild(cardMaker(item))
+        })
+
+        res.data.articles.node.forEach(item => {
+            cards.appendChild(cardMaker(item))
+        })
+    })
+    .catch(drama => {
+        console.log(drama.res)
     })
 
+function cardMaker(data) {
+    const card = document.createElement("div");
+    const headline = document.createElement("div");
+    const author = document.createElement("div");
+    const imgContainer = document.createElement("div");
+    const img = document.createElement("img");
+    const span = document.createElement("span");
 
-function cardMaker(obj){
-    const div_card = document.createElement('div');
-    const div_headline = document.createElement('div');
-    const div_author = document.createElement('div');
-    const div_img = document.createElement('div');
-    const imgAuthor = document.createElement('img');
-    const spanAuthor = document.createElement('span');
+    card.classList.add("card");
+    headline.classList.add("headline");
+    author.classList.add("author");
+    imgContainer.classList.add("img-container");
 
-    div_card.classList.add('card');
-    div_headline.classList.add('headline');
-    div_author.classList.add('author');
-    div_img.classList.add('img-container');
+    img.src = data["authorPhoto"];
 
-    div_card.appendChild(div_headline);
-    div_card.appendChild(div_author);
-    div_card.appendChild(div_img);
-    div_img.appendChild(imgAuthor);
-    div_card.appendChild(spanAuthor);
-    
-    div_headline.textContent = obj.headline;
-    imgAuthor.src = obj.authorPhoto;
-    spanAuthor.textContent = `By ${obj.authorName}`;
+    headline.textContent = data['headline'];
+    span.textContent = data['authorName'];
 
-    div_headline.addEventListener('click', function(){
-        console.log(obj.headline)
+    card.appendChild(headline);
+    card.appendChild(author);
+    author.appendChild(imgContainer);
+    imgContainer.appendChild(img);
+    author.appendChild(span);
+
+    card.addEventListener("click", (event) => {
+        console.log(headline);
     })
 
-    return div_card;
+    return card
 }
